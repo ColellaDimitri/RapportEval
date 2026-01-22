@@ -97,8 +97,7 @@ const TASK_EVALUATION_METHODS = [
   { value: "Evaluation pratique", label: "🧪 Evaluation pratique" },
   { value: "Documentation", label: "📚 Documentation" }
 ];
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 const CLIENT_VERSION = clientPackage.version || "dev";
 const AUTH_STORAGE_KEY = "erapport.auth";
 
