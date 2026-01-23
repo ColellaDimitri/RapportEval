@@ -666,17 +666,34 @@ const getCompetencyRowHeight = (doc, task, comment) => {
   );
 };
 
+const getCompetencyHeaderHeight = (doc, title, index) => {
+  const textPadding = 4;
+  const label = `${index + 1}) ${title}`;
+  doc.font("Helvetica-Bold").fontSize(9);
+  const textHeight = doc.heightOfString(label, {
+    width: competencyTable.width - 90
+  });
+  return Math.max(
+    competencyTable.headerHeight,
+    Math.ceil(textHeight + textPadding * 2)
+  );
+};
+
 const drawCompetencyHeaderRow = (doc, title, index, y) => {
+  const textPadding = 4;
+  const label = `${index + 1}) ${title}`;
+  const headerHeight = getCompetencyHeaderHeight(doc, title, index);
   doc
-    .rect(competencyTable.x, y, competencyTable.width, competencyTable.headerHeight)
+    .rect(competencyTable.x, y, competencyTable.width, headerHeight)
     .fillAndStroke(theme.competencyHeader, theme.text)
     .fillColor(theme.text)
     .fontSize(9)
     .font("Helvetica-Bold")
-    .text(`${index + 1}) ${title}`, competencyTable.x + 6, y + 4, {
+    .text(label, competencyTable.x + 6, y + textPadding, {
       width: competencyTable.width - 90
     });
   doc.font("Helvetica");
+  return headerHeight;
 };
 
 const drawCompetencyRow = (doc, task, code, status, comment, y, rowHeight) => {
@@ -1131,12 +1148,17 @@ const renderStudentReport = (doc, student) => {
   cursorY += summaryTable.noteRowHeight;
   cursorY += 16;
   student.competencies?.forEach((section, sectionIndex) => {
-    if (cursorY + competencyTable.headerHeight > 740) {
+    const headerHeight = getCompetencyHeaderHeight(
+      doc,
+      section.category,
+      sectionIndex
+    );
+    if (cursorY + headerHeight > 740) {
       doc.addPage();
       cursorY = 40;
     }
     drawCompetencyHeaderRow(doc, section.category, sectionIndex, cursorY);
-    cursorY += competencyTable.headerHeight;
+    cursorY += headerHeight;
 
     section.items?.forEach((item) => {
       const taskLabel = item.task || item.label || "-";
