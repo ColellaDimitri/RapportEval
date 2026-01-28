@@ -1153,9 +1153,23 @@ const renderStudentReport = (doc, student) => {
       section.category,
       sectionIndex
     );
-    if (cursorY + headerHeight > 740) {
+    const rowsHeight = (section.items || []).reduce((total, item) => {
+      const taskLabel = item.task || item.label || "-";
+      return total + getCompetencyRowHeight(doc, taskLabel, item.comment);
+    }, 0);
+    const sectionSpacing = 12;
+    const pageTop = 40;
+    const pageBottom = 760;
+    const maxSectionHeight = pageBottom - pageTop;
+    const sectionTotalHeight = headerHeight + rowsHeight + sectionSpacing;
+    const keepTogether = sectionTotalHeight <= maxSectionHeight;
+
+    if (keepTogether && cursorY + sectionTotalHeight > pageBottom) {
       doc.addPage();
-      cursorY = 40;
+      cursorY = pageTop;
+    } else if (!keepTogether && cursorY + headerHeight > 740) {
+      doc.addPage();
+      cursorY = pageTop;
     }
     drawCompetencyHeaderRow(doc, section.category, sectionIndex, cursorY);
     cursorY += headerHeight;
@@ -1168,9 +1182,9 @@ const renderStudentReport = (doc, student) => {
         item.comment
       );
 
-      if (cursorY + rowHeight > 760) {
+      if (!keepTogether && cursorY + rowHeight > pageBottom) {
         doc.addPage();
-        cursorY = 40;
+        cursorY = pageTop;
       }
 
       drawCompetencyRow(
