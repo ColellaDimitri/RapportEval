@@ -237,7 +237,8 @@ h1 {
 }
 
 .student-note-header {
-  width: 160px;
+  width: 140px;
+  text-align: center;
 }
 
 .student-row {
@@ -257,20 +258,26 @@ h1 {
 }
 
 .student-note-cell {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   white-space: nowrap;
+  text-align: right;
 }
 
 .student-note-value {
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
 }
 
 .student-summary-row td {
   background: #f8fafc;
   font-weight: 600;
+  border-bottom: 0;
 }
 
 .student-summary {
@@ -278,6 +285,16 @@ h1 {
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.student-table .button.text {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.student-table .button.text:hover {
+  background: #cbd5e1;
 }
 
 .app-footer {
