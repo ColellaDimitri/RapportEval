@@ -1,4 +1,4 @@
-import archiver from "archiver";
+﻿import archiver from "archiver";
 import cors from "cors";
 import crypto from "crypto";
 import express from "express";
@@ -409,26 +409,24 @@ const getRemediationValue = (competencies = []) => {
     return "-";
   }
 
-  const hasNonOk = allItems.some((item) => item.status !== STATUS_VALUES.OK);
-  if (!hasNonOk) {
+  const nokItems = allItems.filter(
+    (item) => item.status === STATUS_VALUES.NEEDS_IMPROVEMENT
+  );
+  if (nokItems.length === 0) {
     return "Aucune remédiation";
   }
 
-  const remediationMethods = new Set();
-  allItems.forEach((item) => {
-    if (item.status !== STATUS_VALUES.NOT_ASSESSED) {
-      return;
-    }
-    if (item.evaluationMethod) {
-      remediationMethods.add(item.evaluationMethod);
-    }
+  const remediationItems = new Set();
+  nokItems.forEach((item) => {
+    const label = item.task || item.label || "";
+    if (label) remediationItems.add(label);
   });
 
-  if (remediationMethods.size === 0) {
-    return "-";
+  if (remediationItems.size === 0) {
+    return "Aucune remédiation";
   }
 
-  return Array.from(remediationMethods).join(" + ");
+  return Array.from(remediationItems).join(", ");
 };
 
 const competencyTable = {
