@@ -2366,18 +2366,20 @@ function App() {
                     )}
                   </td>
                   <td className="student-note-cell">
-                    <span className="student-note-value">
-                      {student.note || "—"}
-                    </span>
-                    <button
-                      className="button text"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteStudent(student.id);
-                      }}
-                    >
-                      Supprimer
-                    </button>
+                    <div className="student-note-content">
+                      <span className="student-note-value">
+                        {student.note || "—"}
+                      </span>
+                      <button
+                        className="button text"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleDeleteStudent(student.id);
+                        }}
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

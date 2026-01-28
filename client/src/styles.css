@@ -258,13 +258,18 @@ h1 {
 }
 
 .student-note-cell {
+  padding: 0;
+  white-space: nowrap;
+}
+
+.student-note-content {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
   gap: 10px;
-  white-space: nowrap;
-  text-align: right;
   height: 100%;
+  padding: 10px 12px;
+  text-align: right;
 }
 
 .student-note-value {
