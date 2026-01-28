@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import clientPackage from "../package.json";
 
 const DEFAULT_COMPETENCY_OPTIONS = [
@@ -719,6 +719,33 @@ function App() {
       ),
     [activeEvaluationType, activeModuleId, students]
   );
+  const moduleStats = useMemo(() => {
+    let successCount = 0;
+    let failureCount = 0;
+    moduleStudents.forEach((student) => {
+      const numericNote = Number(student.note);
+      if (!Number.isFinite(numericNote)) return;
+      if (numericNote >= 4) {
+        successCount += 1;
+      } else if (numericNote > 0) {
+        failureCount += 1;
+      }
+    });
+    const totalCount = successCount + failureCount;
+    const successPercent = totalCount
+      ? Math.round((successCount / totalCount) * 100)
+      : 0;
+    const failurePercent = totalCount
+      ? Math.round((failureCount / totalCount) * 100)
+      : 0;
+    return {
+      successCount,
+      failureCount,
+      successPercent,
+      failurePercent,
+      totalCount
+    };
+  }, [moduleStudents]);
   const summaryRows = useMemo(() => {
     if (!draft.summaryByCompetencies) {
       return (draft.competencies || []).map((section) => ({
@@ -2276,70 +2303,102 @@ function App() {
               </datalist>
             </div>
           )}
-          <ul className="student-list">
-            {moduleStudents.length === 0 && (
-              <li className="empty">
-                Aucun étudiant pour ce module. Importez une liste pour démarrer.
-              </li>
-            )}
-            {moduleStudents.map((student) => (
-              <li
-                key={student.id}
-                className={[
-                  "student-card",
-                  getStudentNoteClass(student.note),
-                  selectedId === student.id ? "active" : ""
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-                onClick={() => setSelectedId(student.id)}
-              >
-                <div className="student-card-content">
-                  <p className="student-name">
-                    {getStudentDisplayName(student) || "Étudiant sans nom"}
-                  </p>
-                  {template.groupFeatureEnabled && (
-                    <p className="student-meta">
-                      {getStudentGroupName(student)
-                        ? `Groupe : ${getStudentGroupName(student)}`
-                        : "Aucun groupe attribué"}
-                    </p>
-                  )}
-                  {template.groupFeatureEnabled && (
-                    <div
-                      className="student-group-field"
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      <label>
-                        Groupe
-                        <input
-                          type="text"
-                          list="group-options"
-                          value={student.groupName || ""}
-                          onChange={(event) =>
-                            handleStudentGroupChange(
-                              student.id,
-                              event.target.value
-                            )
-                          }
-                          placeholder="Groupe A"
-                        />
-                      </label>
-                    </div>
-                  )}
-                </div>
-                <button
-                  className="button text"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleDeleteStudent(student.id);
-                  }}
+          <table className="student-table">
+            <thead>
+              <tr>
+                <th>Nom prénom</th>
+                <th className="student-note-header">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {moduleStudents.length === 0 && (
+                <tr className="empty">
+                  <td colSpan={2}>
+                    Aucun étudiant pour ce module. Importez une liste pour
+                    démarrer.
+                  </td>
+                </tr>
+              )}
+              {moduleStudents.map((student) => (
+                <tr
+                  key={student.id}
+                  className={[
+                    "student-row",
+                    getStudentNoteClass(student.note),
+                    selectedId === student.id ? "active" : ""
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                  onClick={() => setSelectedId(student.id)}
                 >
-                  Supprimer
-                </button>
-              </li>
-            ))}
-          </ul>
+                  <td>
+                    <p className="student-name">
+                      {getStudentDisplayName(student) || "Étudiant sans nom"}
+                    </p>
+                    {template.groupFeatureEnabled && (
+                      <p className="student-meta">
+                        {getStudentGroupName(student)
+                          ? `Groupe : ${getStudentGroupName(student)}`
+                          : "Aucun groupe attribué"}
+                      </p>
+                    )}
+                    {template.groupFeatureEnabled && (
+                      <div
+                        className="student-group-field"
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        <label>
+                          Groupe
+                          <input
+                            type="text"
+                            list="group-options"
+                            value={student.groupName || ""}
+                            onChange={(event) =>
+                              handleStudentGroupChange(
+                                student.id,
+                                event.target.value
+                              )
+                            }
+                            placeholder="Groupe A"
+                          />
+                        </label>
+                      </div>
+                    )}
+                  </td>
+                  <td className="student-note-cell">
+                    <span className="student-note-value">
+                      {student.note || "—"}
+                    </span>
+                    <button
+                      className="button text"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleDeleteStudent(student.id);
+                      }}
+                    >
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {moduleStudents.length > 0 && (
+                <tr className="student-summary-row">
+                  <td colSpan={2}>
+                    <div className="student-summary">
+                      <span>
+                        Réussite : {moduleStats.successCount} (
+                        {moduleStats.successPercent}%)
+                      </span>
+                      <span>
+                        Échec : {moduleStats.failureCount} (
+                        {moduleStats.failurePercent}%)
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </section>
 
         <section className="panel form-panel">

@@ -212,6 +212,74 @@ h1 {
   box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.18);
 }
 
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.student-table th,
+.student-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+
+.student-table thead th {
+  background: #f8fafc;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.student-note-header {
+  width: 160px;
+}
+
+.student-row {
+  cursor: pointer;
+}
+
+.student-row.note-ok td {
+  background: #f0fdf4;
+}
+
+.student-row.note-nok td {
+  background: #fff7ed;
+}
+
+.student-row.active td {
+  background: #eff6ff;
+}
+
+.student-note-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.student-note-value {
+  font-weight: 600;
+}
+
+.student-summary-row td {
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+.student-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .app-footer {
   margin-top: 32px;
   padding-top: 16px;
