@@ -246,27 +246,24 @@ h1 {
 }
 
 .student-row.note-ok td {
-  background: #f0fdf4;
+  background: transparent;
 }
 
 .student-row.note-nok td {
-  background: #fff7ed;
+  background: transparent;
 }
 
 .student-row.active td {
-  background: #eff6ff;
+  background: transparent;
 }
 
 .student-note-cell {
   display: grid;
   grid-template-columns: 1fr auto;
-  align-items: start;
-  align-content: start;
+  align-items: center;
   gap: 10px;
   white-space: nowrap;
   text-align: right;
-  background: inherit;
-  height: 100%;
 }
 
 .student-note-value {
@@ -300,6 +297,26 @@ h1 {
 
 .student-table .button.text:hover {
   background: #cbd5e1;
+}
+
+.student-row {
+  cursor: pointer;
+}
+
+.student-row.note-ok {
+  background: #f0fdf4;
+}
+
+.student-row.note-nok {
+  background: #fff7ed;
+}
+
+.student-row.active {
+  background: #eff6ff;
+}
+
+.student-row td {
+  background: transparent;
 }
 
 .app-footer {
