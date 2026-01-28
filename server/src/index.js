@@ -1205,21 +1205,7 @@ const renderStudentReport = (doc, student) => {
     cursorY = 40;
   }
 
-  const remediationValue = getRemediationValue(student.competencies);
-  const remediationHeight = 18;
   const remarksHeight = 22;
-
-  doc
-    .rect(40, cursorY, 515, remediationHeight)
-    .stroke(theme.text)
-    .font("Helvetica-Bold")
-    .fontSize(8)
-    .fillColor(theme.text)
-    .text("A remédier :", 46, cursorY + 4)
-    .font("Helvetica")
-    .text(remediationValue, 120, cursorY + 4, { width: 430 });
-
-  cursorY += remediationHeight;
 
   doc
     .rect(40, cursorY, 515, remarksHeight)
