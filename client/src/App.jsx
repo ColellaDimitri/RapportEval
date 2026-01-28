@@ -710,15 +710,24 @@ function App() {
     () => authUser?.name || authUser?.email || "",
     [authUser]
   );
-  const moduleStudents = useMemo(
-    () =>
-      students.filter(
-        (student) =>
-          student.moduleId === activeModuleId &&
-          getStudentEvaluationType(student) === activeEvaluationType
-      ),
-    [activeEvaluationType, activeModuleId, students]
-  );
+  const moduleStudents = useMemo(() => {
+    const filtered = students.filter(
+      (student) =>
+        student.moduleId === activeModuleId &&
+        getStudentEvaluationType(student) === activeEvaluationType
+    );
+
+    return filtered.sort((a, b) => {
+      const lastNameA = String(a?.name || "").trim().toLowerCase();
+      const lastNameB = String(b?.name || "").trim().toLowerCase();
+      if (lastNameA !== lastNameB) {
+        return lastNameA.localeCompare(lastNameB, "fr", { sensitivity: "base" });
+      }
+      const firstNameA = String(a?.firstname || "").trim().toLowerCase();
+      const firstNameB = String(b?.firstname || "").trim().toLowerCase();
+      return firstNameA.localeCompare(firstNameB, "fr", { sensitivity: "base" });
+    });
+  }, [activeEvaluationType, activeModuleId, students]);
   const moduleStats = useMemo(() => {
     let successCount = 0;
     let failureCount = 0;
