@@ -9,8 +9,10 @@ services:
       MARIADB_ROOT_PASSWORD: erapport-root
     ports:
       - "3306:3306"
+
     volumes:
-      - "D:\\Data\\DockerVolume\\rapporteval\\erapport-mariadb-data:/var/lib/mysql"
+      - /mnt/dockervol/rapporteval/erapport-mariadb-data:/var/lib/mysql
+
     restart: unless-stopped
 
   server:
